@@ -1,15 +1,10 @@
 import errorLogBLL from "../bll/error-log.bll";
-import Movie from "../models/movie.model";
 import Theatre from "../models/theatre.model";
 
 export default class theatreBLL {
     async createNewTheatre(theatreObject) {
         try {
-            const { theatreName, totalSeats,title, theatreLocation } = theatreObject;
-
-            const movieResult = await Movie.findOne({$and:[
-                { title: title },
-                {activeStatus:1}]});
+            const { theatreName, totalSeats, theatreLocation } = theatreObject;
 
             const theatre = new Theatre({
                 theatreName,
@@ -17,7 +12,6 @@ export default class theatreBLL {
                 theatreLocation,
                 createdAt: new Date()
             });
-          theatre.movies = movieResult._id;
 
             const result = await theatre.save();
             return {
@@ -33,17 +27,15 @@ export default class theatreBLL {
         }
     }
 
-    
-    async showTheatresByMovieId(theatreObject) {
+    async getTheatreDetailsByTheatreName(theatreObject) {
         try {
-            // console.log(theatreObject.movieId)
-            const result = await Theatre.find({movies:theatreObject.movieId}).populate("movies");
+            const result = await Theatre.findOne({theatreName: theatreObject.theatreName});
             return {
                 status: true,
                 result: result
             };
         } catch (error) {
-            await new errorLogBLL().logError('theatreBLL', 'showTheatreByMovieId', error);
+            await new errorLogBLL().logError('theatreBLL', 'getTheatreDetailsByTheatreName', error);
             return {
                 status: false,
                 error: error.message
@@ -51,5 +43,19 @@ export default class theatreBLL {
         }
     }
 
-   
+    async showTheatres() {
+        try {
+            const result = await Theatre.find();
+            return {
+                status: true,
+                result: result
+            };
+        } catch (error) {
+            await new errorLogBLL().logError('theatreBLL', 'showTheatres', error);
+            return {
+                status: false,
+                error: error.message
+            }
+        }
+    }  
 }
