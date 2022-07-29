@@ -5,11 +5,6 @@ import eErrorMessage from "../enum/error-message.enum";
 
 export const addCity = async (req: Request, res: Response) => {
     try {
-        if (!Object.keys(req.body).length) {
-            return res.status(StatusCodes.BAD_REQUEST).send({
-                message: eErrorMessage.FieldContent
-            });
-        }
         const result = await new cityBLL().addCity(req.body);
         if (result.status) {
 

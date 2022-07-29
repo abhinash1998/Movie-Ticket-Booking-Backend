@@ -7,11 +7,13 @@ export default class cityBLL {
     async addCity(cityObject) {
         try {
 
-            const { cityName,state,movieName } = cityObject;
+            const { cityName, state, movieName } = cityObject;
 
-            const movieResult = await Movie.findOne({$and:[
-                { title: movieName },
-                {activeStatus:1}]});
+            const movieResult = await Movie.findOne({
+                $and: [
+                    { title: movieName },
+                    { activeStatus: 1 }]
+            });
 
             const city = new City({
                 cityName,
@@ -37,10 +39,12 @@ export default class cityBLL {
 
     async showAllCities() {
         try {
-            const result = await City.find().distinct("cityName");
+            const result = await City.distinct("cityName");
+
+            const cityResult = result.map(city => ({ option: city, value: city }))
             return {
                 status: true,
-                result: result
+                result: cityResult
             };
         } catch (error) {
             await new errorLogBLL().logError('cityBLL', 'showAllCities', error);
@@ -53,7 +57,7 @@ export default class cityBLL {
 
     async getMoviesByCityName(cityObject) {
         try {
-            const result = await City.find({cityName: cityObject.cityName}).populate("movieId");
+            const result = await City.find({ cityName: cityObject.cityName }).populate("movieId");
             return {
                 status: true,
                 result: result
