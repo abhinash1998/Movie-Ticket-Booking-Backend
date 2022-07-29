@@ -3,16 +3,16 @@ import eModel from '../enum/model.enum';
 
 const showSchema = new mongoose.Schema({
 
-    createdOn: {
+    showDate: {
         type: Date,
         required: true
     },
     startTime: {
-        type: String,
+        type: Date,
         required: true
     },
     endTime: {
-        type: String,
+        type: Date,
         required: true
     },
     theatres: {
@@ -22,6 +22,10 @@ const showSchema = new mongoose.Schema({
     movies: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: "Movie"
+    },
+    cityId: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "City"
     },
     createdAt: {
         type: Date
