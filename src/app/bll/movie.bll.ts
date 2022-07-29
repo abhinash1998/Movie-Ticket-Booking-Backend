@@ -3,7 +3,7 @@ import Movie from "../models/movie.model";
 
 export default class movieBLL {
 
-    async createMovie(movieObject,imagePath) {
+    async createMovie(movieObject, imagePath) {
         try {
             const { title, description, cast, director, releaseDate, trailerLink,
                 genre, language, durationInMins, format } = movieObject;
@@ -19,10 +19,9 @@ export default class movieBLL {
                 language,
                 durationInMins,
                 format,
-                imagePath:imagePath,
+                imagePath: imagePath,
                 createdAt: new Date()
             });
-
 
             const result = await movie.save();
             return {
@@ -40,7 +39,8 @@ export default class movieBLL {
 
     async showMovies() {
         try {
-            const result = await Movie.find({ activeStatus: 1 })
+            const result = await Movie.find({ activeStatus: 1 });
+
             return {
                 status: true,
                 result: result
@@ -53,7 +53,24 @@ export default class movieBLL {
             }
         }
     }
-    
+
+    async getMovieById(movieObject) {
+        try {
+            const result = await Movie.findOne({ _id: movieObject.movieId });
+
+            return {
+                status: true,
+                result: result
+            };
+        } catch (error) {
+            await new errorLogBLL().logError('movieBLL', 'getMovieById', error);
+            return {
+                status: false,
+                error: error.message
+            }
+        }
+    }
+
     async deleteMovie(movieObject) {
         try {
             await Movie.updateMany(

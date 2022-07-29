@@ -40,12 +40,11 @@ const movieSchema = new mongoose.Schema({
         required: true
     },
     durationInMins: {
-        type: String,
+        type: Number,
         required: true
     },
     format: {
-        type: String,
-        required: true
+        type: String
     },
     activeStatus:{
         default:1,
