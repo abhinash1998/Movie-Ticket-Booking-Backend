@@ -11,13 +11,25 @@ const bookingSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    userId: {
+    seats: {
+        type: String,
+        required: true
+    },
+    amount: {
+        type: Number,
+        required: true
+    },
+    customerId: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: "User"
     },
-    showId: {
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "Show"
+    theatreName: {
+        type: String,
+        required: true
+    },
+    movieName: {
+        type: String,
+        required: true
     },
     timeStamp: {
         type: Date

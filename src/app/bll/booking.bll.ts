@@ -1,19 +1,19 @@
 import errorLogBLL from "../bll/error-log.bll";
 import Booking from "../models/booking.model";
-import Movie from "../models/movie.model";
-import Show from "../models/show.model";
-import Theatre from "../models/theatre.model";
 
 export default class bookingBLL {
     async createBooking(bookingObject) {
         try {
-            const { status,numberOfSeats,userId,showId } = bookingObject;
+            const { status, numberOfSeats, seats, amount, customerId, theatreName, movieName } = bookingObject;
 
             const booking = new Booking({
                 status,
                 numberOfSeats,
-                userId,
-                showId,
+                seats,
+                amount,
+                customerId,
+                theatreName,
+                movieName,
                 timeStamp: new Date()
             });
 
@@ -33,7 +33,7 @@ export default class bookingBLL {
 
     async getBookings() {
         try {
-            const result = await Booking.find(); 
+            const result = await Booking.find().populate("customerId");
 
             return {
                 status: true,
@@ -48,11 +48,10 @@ export default class bookingBLL {
         }
     }
 
-
     async getBookingByUserId(bookingObject) {
         try {
 
-            const result = await Booking.find({userId: bookingObject.userId});
+            const result = await Booking.find({ customerId: bookingObject.userId });
 
             return {
                 status: true,
