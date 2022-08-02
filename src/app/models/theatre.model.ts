@@ -15,6 +15,10 @@ const theatreSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    cityName: {
+        type: String,
+        required: true
+    },
     createdAt: {
         type: Date
     }

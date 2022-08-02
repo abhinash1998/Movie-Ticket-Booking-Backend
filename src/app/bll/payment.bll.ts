@@ -9,7 +9,6 @@ const secret = process.env.STRIPE_SECRET;
 export default class paymentBLL {
     async createPayment(paymentObject) {
         try {
-            console.log(paymentObject)
 
             const customer =   await stripe.customers
             .create({
