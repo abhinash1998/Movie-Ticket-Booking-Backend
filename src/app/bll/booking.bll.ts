@@ -1,21 +1,22 @@
 import errorLogBLL from "../bll/error-log.bll";
 import Booking from "../models/booking.model";
-import Movie from "../models/movie.model";
-import Show from "../models/show.model";
-import Theatre from "../models/theatre.model";
 
 export default class bookingBLL {
     async createBooking(bookingObject) {
         try {
-            const { status,numberOfSeats,seats,amount,customerId,theatreName,movieName } = bookingObject;
-
+            const { status,numberOfSeats,seats,amount,customerId,showDate,startTime,
+                cinemaName, cinemaHallName, movieName } = bookingObject;
+    
             const booking = new Booking({
                 status,
                 numberOfSeats,
                 seats,
                 amount,
                 customerId,
-                theatreName,
+                showDate,
+                startTime,
+                cinemaName, 
+                cinemaHallName,
                 movieName,
                 timeStamp: new Date()
             });

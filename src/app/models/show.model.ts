@@ -15,11 +15,15 @@ const showSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    theatres: {
+    cinemaId: {
         type: mongoose.Schema.Types.ObjectId, 
-        ref: "Theatre"
+        ref: "Cinema"
     },
-    movies: {
+    cinemaHallId: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Cinema-Hall"
+    },
+    movieId: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: "Movie"
     },

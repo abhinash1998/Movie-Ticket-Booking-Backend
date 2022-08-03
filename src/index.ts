@@ -6,7 +6,6 @@ import eSuccessMessage from "./app/enum/success-message.enum";
 import eErrorMessage from "./app/enum/error-message.enum";
 import userRoutes from './app/routes/user.routes';
 import movieRoutes from './app/routes/movie.routes';
-import theatreRoutes from './app/routes/theatre.routes';
 import cityRoutes from './app/routes/city.routes';
 import showRoutes from './app/routes/show.routes';
 import bookingRoutes from './app/routes/booking.routes';
@@ -26,7 +25,6 @@ app.use(cors());
 
 app.use('/', userRoutes);
 app.use('/', movieRoutes);
-app.use('/', theatreRoutes);
 app.use('/', cityRoutes);
 app.use('/', showRoutes);
 app.use('/', bookingRoutes);
