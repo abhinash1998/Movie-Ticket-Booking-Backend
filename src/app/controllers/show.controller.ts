@@ -3,10 +3,10 @@ import { StatusCodes } from "http-status-codes";
 import showBLL from "../bll/show.bll";
 import eErrorMessage from "../enum/error-message.enum";
 
-export const createNewShow = async (req: Request, res: Response) => {
+export const addNewShow = async (req: Request, res: Response) => {
     try {
 
-        const result = await new showBLL().createNewShow(req.body);
+        const result = await new showBLL().addNewShow(req.body);
         if (result.status) {
             return res.status(StatusCodes.CREATED).send(result);
         }
@@ -18,15 +18,15 @@ export const createNewShow = async (req: Request, res: Response) => {
     }
 };
 
-export const showCinemaHallsByMovieIdAndShowDate = async (req: Request, res: Response) => {
+export const showCinemaHallsAndStartTimeByMovieIdAndShowDate = async (req: Request, res: Response) => {
     try {
-        if (!Object.keys(req.query).length || !req.query.movieId || !req.query.showDate
-            || !req.query.cityName) {
+        if (!Object.keys(req.query).length || !req.query.movieId || !req.query.showDate 
+        || !req.query.cityName) {
             return res.status(StatusCodes.BAD_REQUEST).send({
                 message: eErrorMessage.FieldContent
             });
         }
-        const result = await new showBLL().showCinemaHallsByMovieIdAndShowDate(req.query);
+        const result = await new showBLL().showCinemaHallsAndStartTimeByMovieIdAndShowDate(req.query);
         if (result.status) {
             return res.status(StatusCodes.OK).send(result);
         }
@@ -38,14 +38,14 @@ export const showCinemaHallsByMovieIdAndShowDate = async (req: Request, res: Res
     }
 };
 
-export const getShowDatesByMovieId = async (req: Request, res: Response) => {
+export const getShowDatesByMovieIdAndCityName = async (req: Request, res: Response) => {
     try {
         if (!Object.keys(req.query).length || !req.query.movieId || !req.query.cityName) {
             return res.status(StatusCodes.BAD_REQUEST).send({
                 message: eErrorMessage.FieldContent
             });
         }
-        const result = await new showBLL().getShowDatesByMovieId(req.query);
+        const result = await new showBLL().getShowDatesByMovieIdAndCityName(req.query);
         if (result.status) {
             return res.status(StatusCodes.OK).send(result);
         }

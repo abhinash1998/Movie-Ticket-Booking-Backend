@@ -1,7 +1,8 @@
 const eModel = {
     User: 'User',
     Movie: 'Movie',
-    Theatre: 'Theatre',
+    Cinema: 'Cinema',
+    CinemaHall: 'Cinema-Hall',
     City: 'City',
     Show: 'Show',
     Payment: 'Payment',

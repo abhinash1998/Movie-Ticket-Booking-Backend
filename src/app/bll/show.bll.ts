@@ -1,13 +1,14 @@
 import errorLogBLL from "../bll/error-log.bll";
+import CinemaHall from "../models/cinema-hall.model";
+import Cinema from "../models/cinema.model";
 import City from "../models/city.model";
 import Movie from "../models/movie.model";
 import Show from "../models/show.model";
-import Theatre from "../models/theatre.model";
 
 export default class showBLL {
-    async createNewShow(showObject) {
+    async addNewShow(showObject) {
         try {
-            const { showDate, startTime, endTime, theatreName, movieName, cityName } = showObject;
+            const { showDate, startTime, endTime, cinemaName, cinemaHallName, movieName, cityName } = showObject;
 
             const movieResult = await Movie.findOne({
                 $and: [
@@ -15,8 +16,14 @@ export default class showBLL {
                     { activeStatus: 1 }]
             });
 
-            const cinemaHallResult = await Theatre.findOne(
-                { theatreName: theatreName });
+            const cinemaResult = await Cinema.findOne(
+                { cinemaName: cinemaName });
+
+            const cinemaHallResult = await CinemaHall.findOne({
+                $and: [
+                    { cinemaHallName: cinemaHallName },
+                    { cinemaId: cinemaResult._id }]
+            });;
 
             const cityResult = await City.findOne(
                 {
@@ -24,7 +31,7 @@ export default class showBLL {
                         { cityName: cityName },
                         { movieId: movieResult._id }
                     ]
-                });
+                })
 
             const show = new Show({
                 showDate,
@@ -32,8 +39,9 @@ export default class showBLL {
                 endTime,
                 createdAt: new Date()
             });
-            show.movies = movieResult._id;
-            show.theatres = cinemaHallResult._id;
+            show.movieId = movieResult._id;
+            show.cinemaId = cinemaResult._id;
+            show.cinemaHallId = cinemaHallResult._id;
             show.cityId = cityResult._id;
 
             const result = await show.save();
@@ -42,7 +50,7 @@ export default class showBLL {
                 result: result
             };
         } catch (error) {
-            await new errorLogBLL().logError('showBLL', 'createNewShow', error);
+            await new errorLogBLL().logError('showBLL', 'addNewShow', error);
             return {
                 status: false,
                 error: error.message
@@ -50,7 +58,7 @@ export default class showBLL {
         }
     }
 
-    async showCinemaHallsByMovieIdAndShowDate(showObject) {
+    async showCinemaHallsAndStartTimeByMovieIdAndShowDate(showObject) {
         try {
 
             const cityResult = await City.findOne(
@@ -65,15 +73,16 @@ export default class showBLL {
 
             const result = await Show.find({
                 $and: [
-                    { movies: showObject.movieId }, { showDate: showObject.showDate }, { cityId: cityResult._id }]
-            }).populate("theatres");
+                    { movieId: showObject.movieId }, { showDate: showObject.showDate }, { cityId: cityResult._id }]
+            }).populate("cinemaId cinemaHallId");
+
 
             return {
                 status: true,
                 result: result
             };
         } catch (error) {
-            await new errorLogBLL().logError('showBLL', 'showCinemaHallsByMovieIdAndShowDate', error);
+            await new errorLogBLL().logError('showsBLL', 'showCinemaHallsAndStartTimeByMovieIdAndShowDate', error);
             return {
                 status: false,
                 error: error.message
@@ -82,7 +91,7 @@ export default class showBLL {
     }
 
 
-    async getShowDatesByMovieId(showObject) {
+    async getShowDatesByMovieIdAndCityName(showObject) {
         try {
 
             const cityResult = await City.findOne(
@@ -93,7 +102,7 @@ export default class showBLL {
                             { cityName: showObject.cityName }
                         ]
                 }
-            );
+            )
 
             const result = await Show.find({
                 $and:
@@ -104,14 +113,14 @@ export default class showBLL {
                     ]
             }).distinct("showDate");
 
-            const showResult = result.map(show => ({ option: show, value: show }));
+            const showResult = result.map(show => ({ option: show, value: show }))
 
             return {
                 status: true,
                 result: showResult
             };
         } catch (error) {
-            await new errorLogBLL().logError('showBLL', 'getShowDatesByMovieId', error);
+            await new errorLogBLL().logError('showsBLL', 'getShowDatesByMovieIdAndCityName', error);
             return {
                 status: false,
                 error: error.message
@@ -121,7 +130,7 @@ export default class showBLL {
 
     async getAllShows() {
         try {
-            const result = await Show.find().populate("theatres movies cityId");
+            const result = await Show.find({ showDate: { $gte: new Date() } }).sort('showDate').populate("cinemaId cinemaHallId movieId cityId");
             return {
                 status: true,
                 result: result
