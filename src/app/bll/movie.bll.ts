@@ -1,12 +1,26 @@
 import errorLogBLL from "../bll/error-log.bll";
+import City from "../models/city.model";
 import Movie from "../models/movie.model";
 
 export default class movieBLL {
 
-    async createMovie(movieObject, imagePath) {
+    async createMovie(movieObject,imagePath) {
         try {
+            
             const { title, description, cast, director, releaseDate, trailerLink,
-                genre, language, durationInMins, format } = movieObject;
+                genre, language, durationInMins,format } = movieObject;
+
+            movieObject.cityName = JSON.parse(movieObject.cityName);
+   
+                let cityArray=[];
+
+                for (const city of movieObject.cityName) {
+                    const cityResult = await City.findOne({cityName: city});
+                    
+                    cityArray.push(
+                       cityResult._id  
+                    )
+                  }
 
             const movie = new Movie({
                 title,
@@ -19,9 +33,11 @@ export default class movieBLL {
                 language,
                 durationInMins,
                 format,
-                imagePath: imagePath,
-                createdAt: new Date()
+                imagePath:imagePath,
+                createdAt: new Date(),
             });
+
+            movie.cityId = cityArray;
 
             const result = await movie.save();
             return {
@@ -39,7 +55,7 @@ export default class movieBLL {
 
     async showMovies() {
         try {
-            const result = await Movie.find({ activeStatus: 1 });
+            const result = await Movie.find({ activeStatus: 1 })
 
             return {
                 status: true,
@@ -56,7 +72,7 @@ export default class movieBLL {
 
     async getMovieById(movieObject) {
         try {
-            const result = await Movie.findOne({ _id: movieObject.movieId });
+            const result = await Movie.findOne({_id:movieObject.movieId})
 
             return {
                 status: true,
@@ -70,7 +86,7 @@ export default class movieBLL {
             }
         }
     }
-
+    
     async deleteMovie(movieObject) {
         try {
             await Movie.updateMany(

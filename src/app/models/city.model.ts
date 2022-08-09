@@ -11,10 +11,6 @@ const citySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    movieId:{
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "Movie"
-    },
     createdAt: {
         type: Date
     }

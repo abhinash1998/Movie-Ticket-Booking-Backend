@@ -46,6 +46,11 @@ const movieSchema = new mongoose.Schema({
     format: {
         type: String
     },
+    cityId: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "City"
+       
+    }],
     activeStatus:{
         default:1,
         type: Number,
