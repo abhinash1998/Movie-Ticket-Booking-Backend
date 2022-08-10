@@ -52,6 +52,22 @@ export default class bookingBLL {
         }
     }
 
+    async getBookingDetailsById(bookingObject) {
+        try {
+            const result = await Booking.findOne({_id: bookingObject.bookingId}).populate("customerId"); 
+
+            return {
+                status: true,
+                result: result
+            };
+        } catch (error) {
+            await new errorLogBLL().logError('bookingBLL', 'getBookingDetailsById', error);
+            return {
+                status: false,
+                error: error.message
+            }
+        }
+    }
 
     async getBookingByUserId(bookingObject) {
         try {
@@ -74,7 +90,7 @@ export default class bookingBLL {
     async getLatestBookingByUserId(bookingObject) {
         try {
 
-            const result = await Booking.findOne({customerId: bookingObject.userId}).populate("customerId").sort({ _id: -1 })
+            const result = await Booking.findOne({customerId: bookingObject.userId}).populate("customerId").sort({ _id: -1 });
 
             return {
                 status: true,

@@ -55,6 +55,25 @@ export const getBookingByUserId = async (req: Request, res: Response) => {
     }
 };
 
+export const getBookingDetailsById = async (req: Request, res: Response) => {
+    try {
+        if (!Object.keys(req.query).length || !req.query.bookingId) {
+            return res.status(StatusCodes.BAD_REQUEST).send({
+                message: eErrorMessage.FieldContent
+            });
+        }
+        const result = await new bookingBLL().getBookingDetailsById(req.query);
+        if (result.status) {
+            return res.status(StatusCodes.OK).send(result);
+        }
+        else {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(result);
+        }
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error);
+    }
+};
+
 export const getLatestBookingByUserId = async (req: Request, res: Response) => {
     try {
         if (!Object.keys(req.query).length || !req.query.userId) {
