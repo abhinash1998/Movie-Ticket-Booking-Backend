@@ -23,7 +23,7 @@ export default class paymentBLL {
 
                 return {
                     status: true,
-                    result: paymentIntent
+                    result: customer
                 };
           } 
          
