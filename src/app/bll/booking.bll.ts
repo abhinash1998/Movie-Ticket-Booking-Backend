@@ -4,9 +4,9 @@ import Booking from "../models/booking.model";
 export default class bookingBLL {
     async createBooking(bookingObject) {
         try {
-            const { status,numberOfSeats,seats,amount,customerId,showDate,startTime,
+            const { status, numberOfSeats, seats, amount, customerId, showDate, startTime,
                 cinemaName, cinemaHallName, movieName } = bookingObject;
-    
+
             const booking = new Booking({
                 status,
                 numberOfSeats,
@@ -15,7 +15,7 @@ export default class bookingBLL {
                 customerId,
                 showDate,
                 startTime,
-                cinemaName, 
+                cinemaName,
                 cinemaHallName,
                 movieName,
                 timeStamp: new Date()
@@ -37,7 +37,7 @@ export default class bookingBLL {
 
     async getBookings() {
         try {
-            const result = await Booking.find().populate("customerId"); 
+            const result = await Booking.find().populate("customerId");
 
             return {
                 status: true,
@@ -54,7 +54,7 @@ export default class bookingBLL {
 
     async getBookingDetailsById(bookingObject) {
         try {
-            const result = await Booking.findOne({_id: bookingObject.bookingId}).populate("customerId"); 
+            const result = await Booking.findOne({ _id: bookingObject.bookingId }).populate("customerId");
 
             return {
                 status: true,
@@ -72,7 +72,7 @@ export default class bookingBLL {
     async getBookingByUserId(bookingObject) {
         try {
 
-            const result = await Booking.find({customerId: bookingObject.userId});
+            const result = await Booking.find({ customerId: bookingObject.userId });
 
             return {
                 status: true,
@@ -90,7 +90,7 @@ export default class bookingBLL {
     async getLatestBookingByUserId(bookingObject) {
         try {
 
-            const result = await Booking.findOne({customerId: bookingObject.userId}).populate("customerId").sort({ _id: -1 });
+            const result = await Booking.findOne({ customerId: bookingObject.userId }).populate("customerId").sort({ _id: -1 });
 
             return {
                 status: true,

@@ -32,7 +32,7 @@ export default class cinemaHallBLL {
             }
         }
     }
-    
+
     async showCinemaHall() {
         try {
             const result = await CinemaHall.find().populate("cinemaId");
@@ -51,11 +51,11 @@ export default class cinemaHallBLL {
 
     async getCinemaHallByCinemaName(cinemaHallObject) {
         try {
-            const result = await Cinema.findOne({cinemaName: cinemaHallObject.cinemaName})
+            const result = await Cinema.findOne({ cinemaName: cinemaHallObject.cinemaName })
 
-            const ditinctCinemaHall = await CinemaHall.find({cinemaId: result._id}).distinct("cinemaHallName");
+            const ditinctCinemaHall = await CinemaHall.find({ cinemaId: result._id }).distinct("cinemaHallName");
 
-            const cinemaHallResult = ditinctCinemaHall.map(cinemaHall=>({option: cinemaHall, value: cinemaHall}));
+            const cinemaHallResult = ditinctCinemaHall.map(cinemaHall => ({ option: cinemaHall, value: cinemaHall }));
             return {
                 status: true,
                 result: cinemaHallResult

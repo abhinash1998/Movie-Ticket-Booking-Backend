@@ -20,8 +20,8 @@ export const addNewShow = async (req: Request, res: Response) => {
 
 export const showCinemaHallsAndStartTimeByMovieIdAndShowDate = async (req: Request, res: Response) => {
     try {
-        if (!Object.keys(req.query).length || !req.query.movieId || !req.query.showDate 
-        || !req.query.cityName) {
+        if (!Object.keys(req.query).length || !req.query.movieId || !req.query.showDate
+            || !req.query.cityName) {
             return res.status(StatusCodes.BAD_REQUEST).send({
                 message: eErrorMessage.FieldContent
             });

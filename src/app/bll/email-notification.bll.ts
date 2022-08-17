@@ -7,56 +7,56 @@ export default class emailNotificationBLL {
 
     async sendEmail(emailObject) {
         try {
-        
+
             let transport = nodemailer.createTransport({
                 host: "smtp.mailtrap.io",
-                port: 2525,
+                port: process.env.EMAIL_PORT,
                 auth: {
-                  user: "b31c5015f86516",
-                  pass: "6f4843f07d6b3b"
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASSWORD
                 }
-              });
-              const admin = await User.findOne({role: "admin"});
+            });
+            const admin = await User.findOne({ role: "admin" });
 
-              const bookingResult = await Booking.findOne({customerId: emailObject.emailBody.customerId})
-              .sort({ _id: -1 });
+            const bookingResult = await Booking.findOne({ customerId: emailObject.emailBody.customerId })
+                .sort({ _id: -1 });
 
-              let showDate = new Date(emailObject.emailBody.showDate).toLocaleDateString('en-us', 
-              { weekday:"short", month:"long", day:"numeric"});
-           
-              let startTime = new Date(emailObject.emailBody.startTime).toLocaleString('en-us',
-              {timeStyle:"short"});
+            let showDate = new Date(emailObject.emailBody.showDate).toLocaleDateString('en-us',
+                { weekday: "short", month: "long", day: "numeric" });
 
-        let message = {
-            from: `${admin.email}`,
-            to: `${emailObject.emailId}`,
-            subject: "Ticket Details",
-            html: `Hi! Your Book My Show movie ticket details for ${emailObject.emailBody.movieName} 
+            let startTime = new Date(emailObject.emailBody.startTime).toLocaleString('en-us',
+                { timeStyle: "short" });
+
+            let message = {
+                from: `${admin.email}`,
+                to: `${emailObject.emailId}`,
+                subject: "Ticket Details",
+                html: `Hi! Your Book My Show movie ticket details for ${emailObject.emailBody.movieName} 
             are: ${showDate}, ${startTime} at ${emailObject.emailBody.cinemaName}, 
             ${emailObject.emailBody.cinemaHallName}.Seats: ${emailObject.emailBody.seats}. 
             Amount: ₹ ${emailObject.emailBody.amount}.Booking ID: ${bookingResult._id}`
-       }
-
-       transport.sendMail(message, (err, info)=> {
-            if (err) {
-              return {
-                    status: true,
-                    result: err
-                };
-            } else {
-              return {
-                    status: true,
-                    result: info
-                };
             }
-        });
-           
+
+            transport.sendMail(message, (err, info) => {
+                if (err) {
+                    return {
+                        status: true,
+                        result: err
+                    };
+                } else {
+                    return {
+                        status: true,
+                        result: info
+                    };
+                }
+            });
+
         } catch (error) {
             await new errorLogBLL().logError('emailNotificationBLL', 'sendEmail', error);
             return {
                 status: false,
                 error: error.message
             }
-        } 
-    } 
+        }
+    }
 }         

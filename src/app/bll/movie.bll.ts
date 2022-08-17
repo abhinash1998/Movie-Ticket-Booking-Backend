@@ -4,23 +4,23 @@ import Movie from "../models/movie.model";
 
 export default class movieBLL {
 
-    async createMovie(movieObject,imagePath) {
+    async createMovie(movieObject, imagePath) {
         try {
-            
+
             const { title, description, cast, director, releaseDate, trailerLink,
-                genre, language, durationInMins,format } = movieObject;
+                genre, language, durationInMins, format } = movieObject;
 
             movieObject.cityName = JSON.parse(movieObject.cityName);
-   
-                let cityArray=[];
 
-                for (const city of movieObject.cityName) {
-                    const cityResult = await City.findOne({cityName: city});
-                    
-                    cityArray.push(
-                       cityResult._id  
-                    )
-                  }
+            let cityArray = [];
+
+            for (const city of movieObject.cityName) {
+                const cityResult = await City.findOne({ cityName: city });
+
+                cityArray.push(
+                    cityResult._id
+                )
+            }
 
             const movie = new Movie({
                 title,
@@ -33,7 +33,7 @@ export default class movieBLL {
                 language,
                 durationInMins,
                 format,
-                imagePath:imagePath,
+                imagePath: imagePath,
                 createdAt: new Date(),
             });
 
@@ -72,7 +72,7 @@ export default class movieBLL {
 
     async getMovieById(movieObject) {
         try {
-            const result = await Movie.findOne({_id:movieObject.movieId})
+            const result = await Movie.findOne({ _id: movieObject.movieId })
 
             return {
                 status: true,
@@ -86,7 +86,7 @@ export default class movieBLL {
             }
         }
     }
-    
+
     async deleteMovie(movieObject) {
         try {
             await Movie.updateMany(

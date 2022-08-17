@@ -5,7 +5,7 @@ import eErrorMessage from "../enum/error-message.enum";
 
 export const createNewCinemaHall = async (req: Request, res: Response) => {
     try {
-        
+
         const result = await new cinemaHallBLL().createNewCinemaHall(req.body);
         if (result.status) {
 

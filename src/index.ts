@@ -10,8 +10,9 @@ import cityRoutes from './app/routes/city.routes';
 import showRoutes from './app/routes/show.routes';
 import bookingRoutes from './app/routes/booking.routes';
 import paymentRoutes from './app/routes/payment.routes';
+import emailRoutes from './app/routes/email-notification.routes';
 import path = require("path");
-import * as cors from 'cors'
+import * as cors from 'cors';
 dotenv.config();
 
 // create express app
@@ -29,16 +30,17 @@ app.use('/', cityRoutes);
 app.use('/', showRoutes);
 app.use('/', bookingRoutes);
 app.use('/', paymentRoutes);
+app.use('/', emailRoutes);
 app.use('/images', express.static(path.join('images')));
 
 // Connecting to the database
 mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.nqy3i.mongodb.net/?retryWrites=true&w=majority`)
-.then(() => {
+  .then(() => {
     console.log(eSuccessMessage.DbSuccessMessage);
-}).catch(err => {
+  }).catch(err => {
     console.log(eErrorMessage.DbErrorMessage, err);
     process.exit();
-});
+  });
 
 
 app.listen(process.env.NODE_PORT, () => {

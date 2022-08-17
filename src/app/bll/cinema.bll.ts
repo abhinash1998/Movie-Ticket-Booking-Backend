@@ -4,7 +4,7 @@ import Cinema from "../models/cinema.model";
 export default class cinemaBLL {
     async createNewCinema(cinemaObject) {
         try {
-            const { cinemaName, totalCinemaHalls, cinemaLocation,cityName } = cinemaObject;
+            const { cinemaName, totalCinemaHalls, cinemaLocation, cityName } = cinemaObject;
 
             const cinema = new Cinema({
                 cinemaName,
@@ -34,10 +34,10 @@ export default class cinemaBLL {
 
             const distinctCinemaName = await Cinema.distinct("cinemaName");
 
-            const cinemaResult = distinctCinemaName.map(cinema=>({option: cinema, value: cinema}))
+            const cinemaResult = distinctCinemaName.map(cinema => ({ option: cinema, value: cinema }))
             return {
                 status: true,
-                data: {result: result, cinemaResult:cinemaResult}
+                data: { result: result, cinemaResult: cinemaResult }
             };
         } catch (error) {
             await new errorLogBLL().logError('cinemaBLL', 'showCinema', error);
@@ -51,9 +51,9 @@ export default class cinemaBLL {
     async getCinemaNameByCity(cinemaObject) {
         try {
 
-            const result = await Cinema.find({cityName: cinemaObject.cityName}).distinct("cinemaName");
+            const result = await Cinema.find({ cityName: cinemaObject.cityName }).distinct("cinemaName");
 
-            const cinemaResult = result.map(cinema=>({option: cinema, value: cinema}));
+            const cinemaResult = result.map(cinema => ({ option: cinema, value: cinema }));
             return {
                 status: true,
                 result: cinemaResult
